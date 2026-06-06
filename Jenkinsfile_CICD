@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/jaiswaladi246/3-Tier-DevSecOps-Mega-Project.git'
+                git branch: 'k3s-local', url: 'https://github.com/Majidullask04/3-Tier-DevSecOps-Mega-Project.git'
             }
         }
         
@@ -65,9 +65,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('api') {
-                            sh 'docker build -t adijaiswal/backend:latest .'
+                            sh 'docker build -t majid04/backend:latest .'
                             sh 'trivy image --format table -o backend-image-report.html adijaiswal/backend:latest '
-                            sh 'docker push adijaiswal/backend:latest'
+                            sh 'docker push majid04/backend:latest'
                            
                         }
                     }
@@ -80,9 +80,9 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
                         dir('client') {
-                            sh 'docker build -t adijaiswal/frontend:latest .'
+                            sh 'docker build -t majid04/frontend:latest .'
                             sh 'trivy image --format table -o frontend-image-report.html adijaiswal/frontend:latest '
-                            sh 'docker push adijaiswal/frontend:latest'
+                            sh 'docker push majid04/frontend:latest'
                         }
                     }
                 }
@@ -103,13 +103,13 @@ pipeline {
                 script {
                     withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://AFC6FCFF5360B30D5E8950396E38A8C4.gr7.ap-south-1.eks.amazonaws.com') {
                         sh 'kubectl apply -f k8s-prod/sc.yaml'
-                        sleep 20
-                        sh 'kubectl apply -f k8s-prod/mysql.yaml -n prod'
-                        sh 'kubectl apply -f k8s-prod/backend.yaml -n prod'
-                        sh 'kubectl apply -f k8s-prod/frontend.yaml -n prod'
-                        sh 'kubectl apply -f k8s-prod/ci.yaml'
-                        sh 'kubectl apply -f k8s-prod/ingress.yaml -n prod'
-                        sleep 30
+                         sleep 20
+                         sh 'kubectl apply -f k8s-prod/mysql.yaml -n dev'
+                         sh 'kubectl apply -f k8s-prod/backend.yaml -n dev'
+                         sh 'kubectl apply -f k8s-prod/frontend.yaml -n dev'
+                         sh 'kubectl apply -f k8s-prod/ci.yaml'
+                         sh 'kubectl apply -f k8s-prod/ingress.yaml -n dev'
+                         sleep 30
                     }
                 }
             }
@@ -119,9 +119,9 @@ pipeline {
             steps {
                 script {
                     withKubeConfig(caCertificate: '', clusterName: 'devopsshack-cluster', contextName: '', credentialsId: 'k8-prod-token', namespace: 'prod', restrictKubeConfigAccess: false, serverUrl: 'https://AFC6FCFF5360B30D5E8950396E38A8C4.gr7.ap-south-1.eks.amazonaws.com') {
-                        sh 'kubectl get pods -n prod'
-                        sleep 20
-                         sh 'kubectl get ingress -n prod'
+                        sh 'kubectl get pods -n dev'
+                         sleep 20
+                          sh 'kubectl get ingress -n dev'
                         
                     }
                 }
