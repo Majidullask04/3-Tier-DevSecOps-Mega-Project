@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: majid04/frontend:latest
+          image: majid04/frontent:latest
           ports:
             - containerPort: 80
 ---
