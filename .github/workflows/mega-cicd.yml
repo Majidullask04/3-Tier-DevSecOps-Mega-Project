@@ -2,13 +2,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "k3s-local" ]
 
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
 
 
     steps:
@@ -18,9 +19,17 @@ jobs:
       with:
         node-version: '24'
         cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+
+    - name: Find package.json
+      run: |
+       find . -name "package.json"
+       find . -name "package-lock.json"
 
     - name: install dependences
+      working-directory: client
       run: npm ci
 
-    - name: run task
+    - name: run tast
+      working-directory: client
       run: npm test
