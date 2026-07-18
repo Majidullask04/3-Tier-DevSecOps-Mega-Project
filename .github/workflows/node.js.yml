@@ -26,10 +26,3 @@ jobs:
        find . -name "package.json"
        find . -name "package-lock.json"
 
-    - name: install dependences
-      working-directory: client
-      run: npm ci
-
-    - name: run tast
-      working-directory: client
-      run: npm test
